@@ -20,7 +20,7 @@ async def init_database():
 
 async def seed_database():
     """Seed the database with initial game data"""
-    from .seed_data import get_seed_data
+    from seed_data import get_seed_data
     seed_data = get_seed_data()
     
     # Insert dive locations
