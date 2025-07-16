@@ -1,15 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { diveLocations } from '../mock';
+import { apiService } from '../services/api';
 
 const LevelSelect = () => {
   const navigate = useNavigate();
+  const [locations, setLocations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        setLoading(true);
+        const data = await apiService.getLocations();
+        setLocations(data);
+      } catch (err) {
+        setError('Failed to load dive locations');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLocations();
+  }, []);
 
   const handleLocationSelect = (location) => {
     navigate(`/tutorial/${location.id}`);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-300 via-blue-500 to-blue-800 flex items-center justify-center">
+        <div className="text-white text-2xl">Loading dive sites...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-300 via-blue-500 to-blue-800 flex items-center justify-center">
+        <div className="text-white text-2xl">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-300 via-blue-500 to-blue-800 p-4">
@@ -52,7 +88,7 @@ const LevelSelect = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {diveLocations.map((location) => (
+          {locations.map((location) => (
             <Card
               key={location.id}
               className="bg-white/90 backdrop-blur-sm hover:bg-white/95 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl cursor-pointer border-0"
