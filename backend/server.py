@@ -11,8 +11,8 @@ import uuid
 from datetime import datetime
 
 # Import our models and database functions
-from .models import DiveLocation, TenggolTrivia, GameProgress, GameProgressCreate, GameProgressUpdate
-from .database import (
+from models import DiveLocation, TenggolTrivia, GameProgress, GameProgressCreate, GameProgressUpdate
+from database import (
     init_database, get_locations, get_location_by_id, get_tenggol_trivia,
     create_game_progress, get_game_progress, update_game_progress, get_all_game_progress
 )
